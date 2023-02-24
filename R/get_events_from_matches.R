@@ -8,21 +8,15 @@
 
 get_events_from_matches = function(token, matchids){
   t = 0
-  # get KpiNames
-  kpiList <- content(GET(url = paste("https://api.impect.com/v4/customerapi/kpis"), add_headers(Authorization = paste("Bearer", token, sep = " "))))
-
-  kpiNames <- c(0:1500)
-  for (i in 1:length(kpiList$data)) {
-    kpiNames[[kpiList$data[[i]]$kpiId+1]] <- kpiList$data[[i]]$kpiName
-  }
 
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
 
+  start = Sys.time()
   # loop for each match input
   matchEvents <- foreach(
     i = matchids,
-    .packages = c("foreach", "dplyr", "httr", "jsonlite")
+    .packages = c("foreach", "dplyr", "httr", "jsonlite"),
     .combine = bind_rows,
     .multicombine = T,
     .errorhandling = 'remove',
@@ -31,6 +25,7 @@ get_events_from_matches = function(token, matchids){
     get_events(token, i)
   }
   stopCluster(cl)
+  print(Sys.time() - start)
 
   for (i in as.character(c(0:9))){
     matchEvents <- select(matchEvents, -contains(i))
