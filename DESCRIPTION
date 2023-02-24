@@ -3,7 +3,9 @@ Title: A collection of functions to read in and clean IMPECT data
 Imports:
 	dplyr,
     	httr,
-    	jsonlite
+    	jsonlite,
+	parallel,
+	doParallel
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
