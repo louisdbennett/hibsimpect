@@ -20,19 +20,17 @@ get_events_from_matches = function(token, matchids){
   registerDoParallel(cl)
 
   # loop for each match input
-  temp_matches <- foreach(
+  matchEvents <- foreach(
     i = matchids,
+    .packages = c("foreach", "dplyr", "httr", "jsonlite")
     .combine = bind_rows,
     .multicombine = T,
     .errorhandling = 'remove',
-    .export = c("get_events"),
-    .packages = c("foreach", "dplyr", "httr", "jsonlite")
+    .export = c("get_events")
   ) %dopar% {
     get_events(token, i)
   }
   stopCluster(cl)
-
-  matchEvents <- bind_rows(temp_matches, matchEvents)
 
   for (i in as.character(c(0:9))){
     matchEvents <- select(matchEvents, -contains(i))
