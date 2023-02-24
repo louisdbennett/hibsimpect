@@ -25,7 +25,8 @@ get_events_from_matches = function(token, matchids){
     .combine = bind_rows,
     .multicombine = T,
     .errorhandling = 'remove',
-    .export = c("get_events")
+    .export = c("get_events"),
+    .packages = c("foreach", "dplyr", "httr", "jsonlite")
   ) %dopar% {
     get_events(token, i)
   }
