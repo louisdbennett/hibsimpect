@@ -4,9 +4,6 @@
 #'
 #' @param username Impect login email
 #' @param password Impect password
-#' @import httr
-#' @import dplyr
-#' @import jsonlite
 
 generate_token = function(username, password){
   login <- list(client_id = "api", grant_type = "password", username = username, password = password)
